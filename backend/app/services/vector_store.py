@@ -15,6 +15,10 @@ collection = client.get_or_create_collection(
 )
 
 def store_chunks(chunks: list[str]):
+    existing = collection.get()
+    if existing["ids"]:
+        collection.delete(ids=existing["ids"])
+
     collection.upsert(
         documents=chunks,
         ids=[str(i) for i in range(len(chunks))]
